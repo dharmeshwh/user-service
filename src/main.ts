@@ -1,8 +1,16 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { UserModule } from './user.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  try {
+    const app = await NestFactory.create(UserModule);
+
+    await app.listen(3000);
+
+    Logger.log(`~ Application is running on: ${await app.getUrl()}`);
+  } catch (error: any) {
+    Logger.error(`~ Ouch, something went wrong: ${error.message}`);
+  }
 }
 bootstrap();
