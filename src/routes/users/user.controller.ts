@@ -27,20 +27,7 @@ import AdminAuthenticationGuard from '../../middlewares/admin-authentication-gau
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('profile')
-  @UseGuards(AuthenticationGuard)
-  async findOne(@Auth() auth: IVerifyTokenResponse) {
-    const res = this.userService.findOne(auth.userId);
-    return handleHTTPResponse(res);
-  }
-
-  @Get()
-  @UseGuards(AdminAuthenticationGuard)
-  async findAll(@Query(Vp.for(getUsersContract)) query: IGetUsers) {
-    const res = this.userService.findAll(query);
-    return handleHTTPResponse(res);
-  }
-
+  // Route to create user
   @Post()
   @UseGuards(AdminAuthenticationGuard)
   async create(@Body(Vp.for(createUserContract)) user: Partial<UserEntity>) {
@@ -48,6 +35,23 @@ export class UserController {
     return handleHTTPResponse(res);
   }
 
+  // Route to get User profile
+  @Get('profile')
+  @UseGuards(AuthenticationGuard)
+  async findOne(@Auth() auth: IVerifyTokenResponse) {
+    const res = this.userService.findOne(auth.userId);
+    return handleHTTPResponse(res);
+  }
+
+  // Route to find all users
+  @Get()
+  @UseGuards(AdminAuthenticationGuard)
+  async findAll(@Query(Vp.for(getUsersContract)) query: IGetUsers) {
+    const res = this.userService.findAll(query);
+    return handleHTTPResponse(res);
+  }
+
+  // Route to delete user
   @Delete(':id')
   @UseGuards(AdminAuthenticationGuard)
   async remove(@Param(Vp.for(deleteUserContract)) param: IDeleteUser) {

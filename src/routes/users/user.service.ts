@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import HttpResponse from '../../libs/http-response';
 import { UserEntity } from '../../typeorm/entities/user.entity';
+import { EUserTypes } from '../../utils/common-constant';
 import { IGetUsers } from './user.interface';
 
 @Injectable()
@@ -31,6 +32,9 @@ export class UserService {
       const skip = (page - 1) * take;
 
       const users = await UserEntity.find({
+        where: {
+          type: EUserTypes.DEFAULT,
+        },
         take,
         skip,
         select: ['username', 'email', 'id'],
@@ -58,13 +62,15 @@ export class UserService {
 
       if (isUserExists) {
         return HttpResponse.error(
-          'user already exists with this username or email!',
+          `user already exists with this ${
+            isUserExists.username === user.username ? 'username' : 'email'
+          }!`,
         );
       }
 
       await UserEntity.save(user);
 
-      return HttpResponse.created('user created');
+      return HttpResponse.created(null);
     } catch (error: any) {
       return HttpResponse.error(error.message);
     }

@@ -4,7 +4,7 @@ import { EUserTypes } from '../../utils/common-constant';
 const createUserContract = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().email().required(),
-  type: Joi.string().allow(EUserTypes).required(),
+  type: Joi.string().valid(EUserTypes.AMDIN, EUserTypes.DEFAULT).required(),
 });
 
 const getUsersContract = Joi.object({

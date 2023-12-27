@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { UserEntity } from '../typeorm/entities/user.entity';
 import { EUserTypes, headerName } from '../utils/common-constant';
@@ -35,8 +40,9 @@ export default class AuthenticationGuard implements CanActivate {
       };
 
       return true;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      Logger.error(error.message);
+      return false;
     }
   }
 }

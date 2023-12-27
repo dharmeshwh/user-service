@@ -7,9 +7,13 @@ export class S2sService {
   async getUserDetails(id: string) {
     try {
       const user = await UserEntity.findOne({
-        where: {
-          id,
-        },
+        where: [
+          {
+            id,
+          },
+          { username: id },
+        ],
+        select: ['username', 'email', 'id', 'type'],
       });
 
       if (!user) {
